@@ -2,6 +2,8 @@ package com.practice.array;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -18,42 +20,46 @@ import com.practice.response.APIResponse;
 
 @RestController
 @RequestMapping(path = "/v1/array")
-public class SortedArray {
+public class DuplicateElement {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(SortedArray.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DuplicateElement.class);
 
-	@PostMapping(path = "/sortedArray")
-	private ResponseEntity<APIResponse<Map<String, String>>> sortedArray(@RequestBody APIRequest apiRequest) {
-		LOGGER.info("call api for sorted Array:");
-		return sortedArrayLogic(apiRequest);
+	@PostMapping(path = "/duplicateElement")
+	private ResponseEntity<APIResponse<Map<String, String>>> duplicateElement(@RequestBody APIRequest apiRequest) {
+		LOGGER.info("call api for duplicate Element:");
+		return duplicateElementLogic(apiRequest);
 	}
 
-	private ResponseEntity<APIResponse<Map<String, String>>> sortedArrayLogic(APIRequest apiRequest) {
+	private ResponseEntity<APIResponse<Map<String, String>>> duplicateElementLogic(APIRequest apiRequest) {
 		try {
 			String message=new String();
 			Map<String, String> arrayRes=new HashMap<String, String>();
 			int[] array1 = ArrayDetail.array1;
+			int[] arrays1=new int[array1.length];
 			if (apiRequest.isStatus()) {
 				for (int i = 0; i < array1.length; i++) {
 					for (int j = 0; j < array1.length; j++) {
-						if(array1[j]> array1[i]) {
-							int temp=array1[i];
-							array1[i]=array1[j];
-							array1[j]=temp;
-						}
-					}
+						 
+					} 
 				}
-				arrayRes=Map.of("array",Arrays.toString(array1));
+				arrayRes=Map.of("array",Arrays.toString(arrays1));
 				message="Custom Code";
 			}else {
-				arrayRes = Map.of("array",Arrays.toString(Arrays.stream(array1).boxed().toList().stream().sorted().toArray()));
+				HashSet<Integer> hashSet=new HashSet<Integer>();
+				HashSet<Integer> duplicate=new HashSet<Integer>();
+				for(Integer integer:array1) {
+					if(!hashSet.add(integer)) {
+						duplicate.add(integer);
+					}
+				}
+				arrayRes = Map.of("array",Arrays.toString(duplicate.toArray()));
 				message="pre-define java method";
 			}
-			APIResponse<Map<String,String>> apiResponse = new APIResponse<Map<String,String>>(HttpStatus.OK, "success", true,message, arrayRes);
+			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.OK, "success", true,message, arrayRes);
 			return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 		} catch (Exception e) {
 			System.out.println(e.getLocalizedMessage());
-			APIResponse<Map<String,String>> apiResponse = new APIResponse<Map<String,String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", null);
+			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", null);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
 		}
 	}
