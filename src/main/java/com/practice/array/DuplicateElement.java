@@ -3,7 +3,6 @@ package com.practice.array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -57,9 +56,9 @@ public class DuplicateElement {
 			}
 			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.OK, "success", true,message, arrayRes);
 			return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
-		} catch (Exception e) {
-			System.out.println(e.getLocalizedMessage());
-			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", null);
+		}catch (Exception e) {
+			Map<String, String> errorRes = Map.of("error",e.getLocalizedMessage());
+			APIResponse<Map<String,String>> apiResponse = new APIResponse<Map<String,String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", errorRes);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
 		}
 	}

@@ -53,8 +53,8 @@ public class MergeTwoArray {
 			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.OK, "success", true,message, mapResp);
 			return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
 		} catch (Exception e) {
-			System.out.println(e.getLocalizedMessage());
-			APIResponse<Map<String, String>> apiResponse = new APIResponse<Map<String, String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", null);
+			Map<String, String> errorRes = Map.of("error",e.getLocalizedMessage());
+			APIResponse<Map<String,String>> apiResponse = new APIResponse<Map<String,String>>(HttpStatus.INTERNAL_SERVER_ERROR, "failure", false, "error", errorRes);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiResponse);
 		}
 	}
